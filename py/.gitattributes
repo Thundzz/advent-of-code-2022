@@ -1,0 +1,2 @@
+py/*/solve.txt -diff
+py/*/test.in -diff
