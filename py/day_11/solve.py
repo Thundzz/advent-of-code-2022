@@ -4,6 +4,7 @@ def parse_input(file_name):
     with open(file_name) as file:
         # lines = [ l.strip() for l in file.readlines()]
         # file.read()
+        pass
 
 
 
