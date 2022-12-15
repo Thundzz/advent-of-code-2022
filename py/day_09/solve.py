@@ -27,11 +27,9 @@ def new_tail_position(head_pos, tail_pos):
         return tail_pos + steppify(difference)
 
 
-def simulate(instructions):
-    head_position = complex(0,0)
-    tail_position = complex(0,0)
-    head_positions = [head_position]
-    tail_positions = [tail_position]
+def simulate(instructions, nb_knots):
+    current_positions = [complex(0,0) for _ in range(nb_knots)]
+    positions_history = [[complex(0,0)] for _ in range(nb_knots)]
     head_movements = {
         "R" : complex(1, 0),
         "L" : complex(-1, 0),
@@ -40,18 +38,21 @@ def simulate(instructions):
     }
     for direction, count in instructions:
         for _ in range(count):
-            head_position += head_movements[direction]
-            tail_position = new_tail_position(head_position, tail_position)
-            head_positions.append(head_position)
-            tail_positions.append(tail_position)
-
+            current_positions[0] += head_movements[direction]
+            positions_history[0].append(current_positions[0])
+            for i in range(1, nb_knots):
+                current_positions[i] = new_tail_position(current_positions[i-1], current_positions[i])
+                positions_history[i].append(current_positions[i])
+    tail_positions = positions_history[-1]
     return len(set(tail_positions))
 
 def main(file_name):
     instructions = parse_input(file_name)
-    # print(instructions)
-    nb_tail_pos = simulate(instructions)
+    nb_tail_pos = simulate(instructions, 2)
     print(nb_tail_pos)
+    nb_tail_pos = simulate(instructions, 10)
+    print(nb_tail_pos)
+
 
 
 
